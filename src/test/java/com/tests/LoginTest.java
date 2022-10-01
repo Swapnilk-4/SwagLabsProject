@@ -3,7 +3,8 @@ package com.tests;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import com.pages.HomePage;
@@ -12,8 +13,8 @@ import com.pages.LandingPage;
 public class LoginTest {
 	WebDriver driver;
 	
-	@Test
-	void loginTest() {
+	@Test(dataProvider="getLoginData")
+	void login(String username, String password, boolean isDataValid) {
 		
 		System.setProperty("webdriver.edge.driver",
 				"F:\\Tools\\BrowserDrivers\\edgedriver_win64\\msedgedriver.exe");
@@ -22,23 +23,32 @@ public class LoginTest {
 		driver.get("https://www.saucedemo.com/");
 		LandingPage landingPage = new LandingPage(driver);
 		
-		landingPage.userName().sendKeys("standard_user");
+		landingPage.userName().sendKeys(username);
 
-		landingPage.password().sendKeys("secret_sauce");
+		landingPage.password().sendKeys(password);
 
 		landingPage.loginButton().click();
-
 		
-		HomePage homePage = new HomePage(driver);
-		try {
+		if(isDataValid) {
+			HomePage homePage = new HomePage(driver);
 			Assert.assertTrue(homePage.menuButton().isDisplayed());
-		} catch(Exception e) {
-			Assert.fail();
+		} else {
+			Assert.assertTrue(landingPage.lockedOutError().isDisplayed());
 		}
-		
 	}
 	
-	@AfterClass
+	@DataProvider
+	Object[][] getLoginData() {
+		Object[][] data = {
+				{"standard_user","secret_sauce", true},
+				{"locked_out_user","secret_sauce", false},
+				{"problem_user","secret_sauce", true},
+				{"performance_glitch_user","secret_sauce", true}
+		};
+		return data;
+	}
+	
+	@AfterMethod
 	void tearDown() {
 		driver.close();
 	}

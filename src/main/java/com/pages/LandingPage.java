@@ -23,6 +23,9 @@ public class LandingPage {
 	@FindBy(css=".login_logo")
 	WebElement loginLogoE;
 	
+	@FindBy(xpath="//h3[@data-test='error']")
+	WebElement lockedOutErrorE;
+	
 	public WebElement userName() {
 		return usernameE;
 	}
@@ -37,6 +40,10 @@ public class LandingPage {
 	
 	public WebElement loginLogo() {
 		return loginLogoE;
+	}
+	
+	public WebElement lockedOutError() {
+		return lockedOutErrorE;
 	}
 
 }
