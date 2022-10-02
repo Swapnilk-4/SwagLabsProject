@@ -21,18 +21,21 @@ public class Listener implements ITestListener{
 
 	@Override
 	public void onTestSuccess(ITestResult result) {
-		test.log(Status.PASS, "Passed" );
+		String details = getMethodNameWithParams(result);
+		test.log(Status.PASS, details );
 		
 	}
 
 	@Override
 	public void onTestFailure(ITestResult result) {
 		test.fail(result.getThrowable());
+		String details = getMethodNameWithParams(result);
+		test.info(details);
 	}
 
 	@Override
 	public void onTestSkipped(ITestResult result) {
-		test.log(Status.SKIP, "Skipped" );
+		
 	}
 
 	@Override
@@ -51,6 +54,22 @@ public class Listener implements ITestListener{
 	public void onFinish(ITestContext context) {
 		extent.flush();
 		
+	}
+	
+	public String getMethodNameWithParams(ITestResult result) {
+		String details = result.getName() + "( ";
+		Object[] params = result.getParameters();
+		int len = params.length;
+		for(int i = 0; i < len; i++) {
+			details += params[i].toString();
+			if(i == len -1) {
+				details += " )";
+			}
+			else {
+				details += ", ";
+			}
+		}
+		return details;
 	}
 
 }
