@@ -1,26 +1,18 @@
 package com.tests;
 
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.edge.EdgeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import com.base.BaseTest;
 import com.pages.HomePage;
 import com.pages.LandingPage;
 
-public class LoginTest {
-	WebDriver driver;
+public class LoginTest extends BaseTest{
 	
 	@Test(dataProvider="getLoginData")
 	void login(String username, String password, boolean isDataValid) {
 		
-		System.setProperty("webdriver.edge.driver",
-				"F:\\Tools\\BrowserDrivers\\edgedriver_win64\\msedgedriver.exe");
-		driver = new EdgeDriver();
-		driver.manage().window().maximize();
-		driver.get("https://www.saucedemo.com/");
 		LandingPage landingPage = new LandingPage(driver);
 		
 		landingPage.userName().sendKeys(username);
@@ -48,9 +40,5 @@ public class LoginTest {
 		return data;
 	}
 	
-	@AfterMethod
-	void tearDown() {
-		driver.close();
-	}
 
 }
