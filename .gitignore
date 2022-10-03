@@ -2,6 +2,7 @@
 /target
 /test-output
 /reports
+/logs
 
 .project
 .classpath

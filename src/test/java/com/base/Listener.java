@@ -15,7 +15,6 @@ public class Listener implements ITestListener{
 	
 	@Override
 	public void onTestStart(ITestResult result) {
-		
 		 test = extent.createTest(result.getMethod().getMethodName());
 	}
 
@@ -23,7 +22,6 @@ public class Listener implements ITestListener{
 	public void onTestSuccess(ITestResult result) {
 		String details = getMethodNameWithParams(result);
 		test.log(Status.PASS, details );
-		
 	}
 
 	@Override
